@@ -4,7 +4,7 @@ import std/[strformat]
 import ./wrappcap/libpcap
 
 type
-    LibPcapError = object of Exception
+    LibPcapError = object of CatchableError
 
 var errbuf: array[1024, char]
 proc err*(): cstring {.inline.} =
