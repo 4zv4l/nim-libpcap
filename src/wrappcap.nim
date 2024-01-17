@@ -37,9 +37,9 @@ proc openLive*(dev: string, snaplen: int, promisc: bool, to_ms: int): Pcap =
     if result == nil:
         raise newException(LibPcapError, fmt"Error when opening interface {dev}: {err()}")
 
-iterator packets*(dev: string, snaplen: int = 1024, promisc: bool = false, to_ms: int = 10000): (string, string) = 
+iterator packets*(pcap: Pcap): (string, string) = 
+    ## Listen for packets on `pcap` and yield the packets
     var
-        pcap = openLive(dev, snaplen, promisc, to_ms)
         packet: ptr byte
         packet_header: PcapPacketHeader
 
