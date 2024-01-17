@@ -20,5 +20,5 @@ test "open live":
 test "packets loop":
     let dev = findAllDevs()[0]
     let pcap = openLive(dev, 1024, false, 10000)
-    for packet in dev.packets:
+    for packet in pcap.packets:
         echo packet.repr
