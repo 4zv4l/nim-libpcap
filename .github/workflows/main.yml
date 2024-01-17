@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  deploy:
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Setup nim"
+        uses: jiro4989/setup-nim-action@v1
+
+      - name: "Build documentation"
+        uses: ire4ever1190/nim-docs-action@v1
+        with:
+          main-file: "src/wrappcap.nim"
+          deploy: "pages"
