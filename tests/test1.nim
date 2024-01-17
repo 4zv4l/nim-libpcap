@@ -9,6 +9,10 @@ import unittest
 
 import wrappcap
 
-test "basics":
+test "get all devs":
     let devs = findAllDevs()
     echo devs.repr
+
+test "open live":
+    let dev  = findAllDevs()[0]
+    let pcap = openLive(dev, 1024, false, 10000)

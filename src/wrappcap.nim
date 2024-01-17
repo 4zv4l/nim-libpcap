@@ -6,7 +6,7 @@ import ./wrappcap/libpcap
 type
     LibPcapError = object of CatchableError
 
-var errbuf: array[1024, char]
+var errbuf: array[PCAP_ERRBUF_SIZE, char]
 proc err*(): cstring {.inline.} =
     ## libpcap error handling
     ##
@@ -31,6 +31,10 @@ proc findAllDevs*(): seq[string] =
     # TODO: fix this not working (valgrind says no leak on my side)
     #pcapFreeAllDevs(devs)
 
-# TODO: learn how to raise exception :3
+proc openLive*(dev: string, snaplen: int, promisc: bool, to_ms: int): Pcap =
+    result = pcapOpenLive(dev.cstring, snaplen.cint, promisc.cint, to_ms.cint, err())
+    if result == nil:
+        raise newException(LibPcapError, fmt"Error when opening interface {dev}: {err()}")
+
 if pcapInit(0,err()) != 0:
     raise newException(LibPcapError, fmt"Error when running pcapInit: {err()}")
