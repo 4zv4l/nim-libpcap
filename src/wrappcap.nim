@@ -46,5 +46,9 @@ iterator packets*(pcap: Pcap): (string, string) =
     while pcapNextEx(pcap, packet_header, packet) == 1:
         yield (packet_header.repr, packet.repr)
 
+## TODO: use https://github.com/PMunch/nim-pcap to parse the packets
+proc parse(p: ptr byte) =
+    discard
+
 if pcapInit(0,err()) != 0:
     raise newException(LibPcapError, fmt"Error when running pcapInit: {err()}")

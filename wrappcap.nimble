@@ -9,3 +9,4 @@ srcDir        = "src"
 
 # Dependencies
 requires "nim >= 1.6.3"
+requires "https://github.com/PMunch/nim-pcap"
