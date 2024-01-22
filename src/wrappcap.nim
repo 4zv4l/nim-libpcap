@@ -1,4 +1,4 @@
-## Nim basic wrapper wround libpcap
+## Nim basic wrapper around libpcap
 
 import std/[strformat]
 import ./wrappcap/libpcap
