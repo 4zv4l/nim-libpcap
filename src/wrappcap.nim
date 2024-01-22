@@ -37,12 +37,20 @@ proc openLive*(dev: string, snaplen: int, promisc: bool, to_ms: int): Pcap =
     if result == nil:
         raise newException(LibPcapError, fmt"Error when opening interface {dev}: {err()}")
 
-iterator packets*(pcap: Pcap): (string, string) = 
+proc setFilter*(pcap: Pcap, filter: string) =
+    ## Apply `filter` on `pcap`
+    var f: BpfProgram
+    if pcapCompile(pcap, f, filter, 0, 0) == -1:
+        raise newException(LibPcapError, fmt"Couldnt compile: {filter}")
+    if pcapSetFilter(pcap, f) == -1:
+        raise newException(LibPcapError, fmt"Couldnt apply filter: {filter}")
+
+iterator packets*(pcap: Pcap, filter: string = ""): (string, string) = 
     ## Listen for packets on `pcap` and yield the packets
     var
         packet: ptr byte
         packet_header: PcapPacketHeader
-
+    if filter.len() > 0: setFilter(pcap, filter)
     while pcapNextEx(pcap, packet_header, packet) == 1:
         yield (packet_header.repr, packet.repr)
 
